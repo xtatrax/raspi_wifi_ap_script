@@ -62,8 +62,7 @@ fi
 #
 apt update
 apt install -y $apt_install_list
-systemctl disable dnsmasq
-systemctl stop dnsmasq
+
 echo "SUBSYSTEM==\"ieee80211\", ACTION==\"add|change\", ATTR{macaddress}==\"$wlan0_macadd\", KERNEL==\"phy0\", \\
   RUN+=\"/sbin/iw phy phy0 interface add $vnic_name type __ap\", \\
   RUN+=\"/bin/ip link set $vnic_name address $vmacadd\"

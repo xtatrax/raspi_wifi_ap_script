@@ -20,7 +20,7 @@ fi
 self_name=$(basename $0)
 self_dir=$(cd $(dirname $0); pwd)
 self_path=$self_dir/$self_name
-self_model=$(cat /proc/cpuinfo | grep Model)
+self_model=$(cat /proc/cpuinfo)
 
 dnsmasq_conf_path=/etc/dnsmasq.conf
 dhcpcd_conf_path=/etc/dhcpcd.conf
@@ -43,7 +43,7 @@ ssid_key=devnet_user1234
 #
 #   
 #
-if [[$self_model =~ $target_name]]; then
+if cat "$self_model" | grep -q $target_name ; then
 	is_rpi=True
 else
 	echo "e)This script is written to be run on a Raspberry Pi."
@@ -57,8 +57,8 @@ fi
 apt update
 apt install -y $apt_install_list
 
-echo "SUBSYSTEM==\"ieee80211\", ACTION==\"add|change\", ATTR{macaddress}==\"$wlan0_macadd\", KERNEL==\"phy0\", \
-  RUN+=\"/sbin/iw phy phy0 interface add $vnic_name type __ap\", \
+echo "SUBSYSTEM==\"ieee80211\", ACTION==\"add|change\", ATTR{macaddress}==\"$wlan0_macadd\", KERNEL==\"phy0\", \\
+  RUN+=\"/sbin/iw phy phy0 interface add $vnic_name type __ap\", \\
   RUN+=\"/bin/ip link set $vnic_name address $vmacadd\"
 " > /etc/udev/rules.d/99-$vnic_name.rules
 
