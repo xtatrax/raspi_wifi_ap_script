@@ -20,36 +20,14 @@ fi
 self_name=$(basename $0)
 self_dir=$(cd $(dirname $0); pwd)
 self_path=$self_dir/$self_name
-self_model=$(cat /proc/cpuinfo)
 
-apt_install_list="dnsmasq vim"
-wlan0_macadd=$(cat /sys/class/net/wlan0/address)
-vmacadd=ee:ee:ee:12:34:56
-target_name="Raspberry"
-
-dhcp_root_addr=192.168.200.1
-dhcp_lange_start=192.168.200.2
-dhcp_lange_end=192.168.200.254
-
-
-vnic_name=ap0
-ssid=dev_net_01
-ssid_key=devnet_user1234
-ct_name=dev_net_ap
-
-ieee80211_band=bg
-ieee80211_channel=11
-ieee80211_kmg=wpa-psk
-ieee80211_proto=rsn
-ieee80211_group=ccmp
-ieee80211_pairwise=ccmp
-ieee80211_method=shared
+source ./config.sh
 
 ##################
 #
 #   
 #
-if cat "$self_model" | grep -q $target_name ; then
+if echo "$self_model" | grep -q $target_name ; then
 	is_rpi=True
 else
 	echo "e)This script is written to be run on a Raspberry Pi."
@@ -62,7 +40,8 @@ fi
 #
 apt update
 apt install -y $apt_install_list
-
+#systemctl disable dnsmasq
+#systemctl stop dnsmasq
 echo "SUBSYSTEM==\"ieee80211\", ACTION==\"add|change\", ATTR{macaddress}==\"$wlan0_macadd\", KERNEL==\"phy0\", \\
   RUN+=\"/sbin/iw phy phy0 interface add $vnic_name type __ap\", \\
   RUN+=\"/bin/ip link set $vnic_name address $vmacadd\"
@@ -80,5 +59,6 @@ nmcli con modify $ct_name ipv4.method $ieee80211_method
 nmcli con modify $ct_name ipv4.addr $dhcp_root_addr/24
 nmcli con up $ct_name
 
+nmcli con modify preconfigured type wifi ifname wlan0 mode infrastructure
 
 systemctl restart NetworkManager.service

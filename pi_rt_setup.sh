@@ -43,7 +43,7 @@ ssid_key=devnet_user1234
 #
 #   
 #
-if cat "$self_model" | grep -q $target_name ; then
+if echo "$self_model" | grep -q $target_name ; then
 	is_rpi=True
 else
 	echo "e)This script is written to be run on a Raspberry Pi."
