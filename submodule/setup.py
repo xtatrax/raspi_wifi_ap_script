@@ -17,7 +17,7 @@
 ############################################################
 
 import argparse
-
+"""
 def thread_arg_type(string):
     value = int(string)
     if value < 0:
@@ -46,3 +46,5 @@ parser_b = subparsers.add_parser('command_2', help=u'help for command_2')
 parser_b.add_argument('-e', type=str,required=True, help=u'help for b')
 parser_b.add_argument('-f', type=str,required=True, action='store', default='', help=u'test')
 args = parser.parse_args() # コマンドラインの引数を解釈します
+"""
+

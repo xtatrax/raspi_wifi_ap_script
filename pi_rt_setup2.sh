@@ -21,7 +21,7 @@ self_name=$(basename $0)
 self_dir=$(cd $(dirname $0); pwd)
 self_path=$self_dir/$self_name
 
-source ./config.sh
+source ./config/config.sh
 
 ##################
 #
