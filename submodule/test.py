@@ -36,7 +36,7 @@ class Color:
 		BG_DEFAULT     = '\033[49m'#背景色をデフォルトに戻す
 
 		RESET          = '\033[0m'#全てリセット
- 
+
 
 def draw():
 	for y in range(columns):

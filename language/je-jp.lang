@@ -1,0 +1,11 @@
+{
+	"header":{
+		"LanguageCode":"je-jp",
+		"Description":"Janglish English-like languages, *deprecated"
+	},
+	"messages":{
+		"lanSelectInfo":" please select number  : ",
+		"invalidValue":" Invalid Value",
+		"fragment":"fragment"
+	}
+}

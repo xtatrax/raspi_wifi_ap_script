@@ -1,0 +1,10 @@
+{
+	"header":{
+		"LanguageCode":"ja-jp",
+		"Description":"日本語"
+	},
+	"messages":{
+		"test":"テスト"
+	}
+
+}

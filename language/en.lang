@@ -1,0 +1,10 @@
+{
+	"header":{
+		"LanguageCode":"en",
+		"Description":"English"
+	},
+	"messages":{
+		"test":"test"
+	}
+
+}

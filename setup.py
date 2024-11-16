@@ -3,7 +3,7 @@
 ############################################################
 # file			 : setup.py
 # 制作			 : tatra 2024年11月12日
-# 対象バージョン : python 3.x 
+# 対象バージョン : python 3.10. 以上
 # version 		 : '0.0.1'
 # 
 #
@@ -12,11 +12,14 @@
 #
 #""" Details about the module and for what purpose it was built for"""
 # ---------------------------------------------------------------------------
-# 外部モジュール :
+# 外部モジュール : chardet
 # ---------------------------------------------------------------------------
 ############################################################
 
 import argparse
+import enum
+from submodule.debug import debug, LogLevel
+from submodule import LanguageWrapper
 """
 def thread_arg_type(string):
     value = int(string)
@@ -48,3 +51,55 @@ parser_b.add_argument('-f', type=str,required=True, action='store', default='', 
 args = parser.parse_args() # コマンドラインの引数を解釈します
 """
 
+@enum.unique
+class UIMode(enum.IntEnum):
+	NUM = 0
+	CUI = 1
+	GUI = 2
+
+def __show_Lang_Select_UI_NUM__(langWap:LanguageWrapper.LangWap):
+	llist = langWap.getLangList()
+	langlist=[]
+	i=0
+	for l in llist:
+		lc=llist[l]["LanguageCode"]
+		langlist.append(lc)
+		print(" {: >2}".format(i) + " : " + lc + " -> " + llist[l]["Description"])
+		i+=1
+	#debug.dprint(langlist)
+	while (True):
+		i_val = input(langWap.getMessage("lanSelectInfo"))
+		try:
+			i_val = int(i_val)
+		except:
+			print(langWap.getMessage("invalidValue"))
+			continue
+		if (not ( 0 < i_val < i )):
+			print(langWap.getMessage("invalidValue"))
+			continue
+		else :
+			break
+	langWap.loadLang(langlist[i_val])
+
+
+def __show_Lang_Select_UI_CUI__(langWap:LanguageWrapper.LangWap):
+	raise Exception("未実装")
+def __show_Lang_Select_UI_GUI__(langWap:LanguageWrapper.LangWap):
+	raise Exception("未実装")
+
+def showLangSelectUI(langWap:LanguageWrapper.LangWap, mode:UIMode=UIMode.NUM):
+	match mode:
+		case UIMode.NUM:
+			__show_Lang_Select_UI_NUM__(langWap)
+		case UIMode.CUI:
+			__show_Lang_Select_UI_CUI__(langWap)
+		case UIMode.GUI:
+			__show_Lang_Select_UI_GUI__(langWap)
+
+if __name__ == "__main__":
+	#debug.set_level(LogLevel.ALL)
+	langWap = LanguageWrapper.LangWap()
+	llist = langWap.getLangList()
+	debug.dprint(llist)
+
+	showLangSelectUI(langWap)
