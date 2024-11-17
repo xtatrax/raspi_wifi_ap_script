@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################
-# file			 : setup.py
+# file			 : LanguageWrapper.py
 # 制作			 : tatra 2024年11月12日
 # 対象バージョン : python 3.x. 以上
 # version 		 : '0.0.5'

@@ -23,7 +23,7 @@ class debug():
 		global logLevel
 		logLevel = level
 
-	def print(comment, ll:LogLevel=LogLevel.DEBUG):
+	def print(comment, ll:LogLevel=LogLevel.ALL):
 		global logLevel
 		if ll in logLevel:
 			print(comment)

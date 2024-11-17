@@ -85,7 +85,7 @@ def __show_Lang_Select_UI_NUM__(langWap:LanguageWrapper.LangWap):
 def __show_Lang_Select_UI_CUI__(langWap:LanguageWrapper.LangWap):
 	raise Exception("未実装")
 def __show_Lang_Select_UI_GUI__(langWap:LanguageWrapper.LangWap):
-	raise Exception("未実装")
+	raise Exception("please Override")
 
 def showLangSelectUI(langWap:LanguageWrapper.LangWap, mode:UIMode=UIMode.NUM):
 	match mode:
