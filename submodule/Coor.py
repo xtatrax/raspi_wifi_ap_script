@@ -69,6 +69,26 @@ class Rect():
 		pass
 	def __init__(self,begin,end):
 	    pass
+	def __init__(self,point,size):
+		pass
+	def getSize(self):
+		pass
+	def getWide(self):
+		pass
+	def getHeight(self):
+		pass
+	def getBegin(self):
+		pass
+	def getBeginX(self):
+		pass
+	def getBeginY(self):
+		pass
+	def getEnd(self):
+		pass
+	def getEndX(self):
+		pass
+	def getEndY(self):
+		pass
 
 
 
