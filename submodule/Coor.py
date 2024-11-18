@@ -62,6 +62,13 @@ class Vector():
 	r=0
 
 class Rect():
+	begin:Point
 	size:Size
+	point:Point
+	def __init__(self,x,y,h,w):
+		pass
+	def __init__(self,begin,end):
+	    pass
+
 
 
