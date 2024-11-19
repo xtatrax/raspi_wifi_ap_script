@@ -66,10 +66,17 @@ class Rect():
 	size:Size
 	point:Point
 	def __init__(self,x,y,h,w):
+		self.begin=Point(x,y)
+		self.size=Size(h,w)
 		pass
 	def __init__(self,begin,end):
+		self.begin=begin
+		self.size=begin-end
 	    pass
 	def __init__(self,point,size):
+		self.point=point
+		self.size=size
+		# 寄せ定義して開始位置を算出
 		pass
 	def getSize(self):
 		pass
