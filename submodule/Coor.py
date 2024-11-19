@@ -4,8 +4,8 @@
 # file			 : coor.py
 # 推奨TABサイズ	 : 4
 # 制作			 : tatra 2024年11月17日
-# 対象バージョン : python 3.x. 以上
-# version 		 : '0.0.1'
+# 対象バージョン : python 3.10. 以上
+# version 		 : '0.0.5'
 # 説明			 :
 #	座標系の定義
 #
@@ -16,7 +16,23 @@
 # ---------------------------------------------------------------------------
 ############################################################
 
-class Algin():
+import enum
+
+class Algin(enum.Flag):
+	top=enum.auto()
+	bottom=enum.auto()
+	left=enum.auto()
+	right=enum.auto()
+
+	top_left=top | left
+	bottom_left=bottom |left
+	top_right=top | right
+	bottom_right=bottom | right
+
+	w_middle=top | bottom
+	h_middle=left | right
+
+	center=w_middle | h_middle
 	pass
 
 class Point():
@@ -42,6 +58,13 @@ class Point():
 		"""
 		self.x = x
 		self.y = y
+	def __add__(self, other:Point):
+		self.x += other.x
+		self.y += other.y
+
+	def __sub__(self, other:Point):
+		self.x -= other.x
+		self.y -= other.y
 
 class Size():
 	w=0
@@ -50,7 +73,12 @@ class Size():
 		"""
 			Point()
 		"""
-
+	def __init__(self,point:Point) -> None:
+		"""
+			Point()
+		"""
+		self.w = point.x
+		self.h = point.y
 	def __init__(self,w,h) -> None:
 		"""
 			Size(w,h)
@@ -63,40 +91,53 @@ class Vector():
 	r=0
 
 class Rect():
-	begin:Point
-	size:Size
+	base_point:Algin
 	point:Point
-	def __init__(self,x,y,h,w):
-		self.begin=Point(x,y)
+	size:Size
+	
+	def __init__(self, x, y, h, w) -> None:
+		"""
+
+		"""
+		self.point=Point(x,y)
 		self.size=Size(h,w)
-		pass
-	def __init__(self,begin,end):
-		self.begin=begin
+		self.base_point=Algin.top_left
+
+	def __init__(self,begin:Point,end:Point) -> None:
+		"""
+		"""
+		self.point=begin
 		self.size=begin-end
-		pass
-	def __init__(self,point,size):
+		self.base_point=Algin.top_left
+
+	def __init__(self,point:Point,size:Size,base_point:Algin) -> None:
+		"""
+		"""
+		self.base_point=base_point
 		self.point=point
 		self.size=size
 		# 寄せ定義して開始位置を算出
-		pass
-	def getSize(self):
-		pass
+
+	def getSize(self)->Size:
+		return self.size
 	def getWide(self):
-		pass
+		return self.size.w
 	def getHeight(self):
-		pass
-	def getBegin(self):
-		pass
+		return self.size.h
+	def getBegin(self)->Point:
+		return self.point
 	def getBeginX(self):
-		pass
+		return self.point.x
 	def getBeginY(self):
-		pass
-	def getEnd(self):
-		pass
+		return self.point.y
+	def getEnd(self)->Point:
+		return self.point + self.size
 	def getEndX(self):
-		pass
+		return self.point.x + self.size.w
 	def getEndY(self):
-		pass
+		return self.point.y + self.size.h
 
 
 
+if __name__ == "__main__":
+	rect = Rect(0,0,1,1)

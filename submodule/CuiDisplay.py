@@ -17,7 +17,7 @@
 import math
 import shutil
 
-from Coor import Size
+#from Coor import Size
 
 if __name__ == "__main__":
 	from debug import debug, LogLevel
@@ -95,11 +95,11 @@ class ClUiObje():
 	def __init__(self) -> None:
 		self.child:ClUiObje=[]
 		self.parent:ClUiObje
-		self.size:Size
+		self.rect:Rect
 		return
 
 	def getSize(self)-> Size:
-		return Size(0,0)
+		return self.rect.getSize()
 
 	def __addParent(self,parent:ClUiObje):
 		self.parent = parent
@@ -110,6 +110,9 @@ class ClUiObje():
 		self.child.append(child)
 		return
 
+	def update(self):
+		for o in self.child:
+			o.update()
 	def draw(self, in_CanvasSize:Size, in_Point:Point)->int:
 		x=0
 		for child in self.child:
@@ -119,14 +122,17 @@ class ClUiObje():
 class World(ClUiObje):
 	bg_color:Color.BG = Color.BG.BLUE
 	base_text_color:Color.FG = Color.FG.BLACK
-	def __init__(self, size:Size) -> None:
+	def __init__(self, rect:Rect) -> None:
 		super().__init__()
-		self.size=size
+		self.rect=rect
 		return
 
 	def getSize(self)->Size:
-		return self.size
-	
+		return self.rect.getSize()
+	def update(self,rect:Rect):
+
+		for o in self.child:
+			o.update()
 	def draw(self, in_CanvasSize:Size, in_Point:Point)->int:
 		num=in_Point.x%10
 		m = self.bg_color + str(num) + Color.CT.RESET
@@ -159,6 +165,9 @@ class Window(ClUiObje):
 		super().__init__()
 
 	def getSize(self) -> Size:
+		return self.rect.getSize()
+
+	def update(self):
 		size = self.parent.getSize()
 
 		wmh = math.floor( size.h * (self.margin_par / 100) )
@@ -169,7 +178,8 @@ class Window(ClUiObje):
 
 		self.size = Size(w_margin_w,w_margin_h)
 
-		return self.size
+		for o in self.child:
+			o.update()
 
 	def draw(self, in_ConsSize:Size, in_Point:Point)->int:
 		self.getSize()
@@ -183,6 +193,8 @@ class WindowFrame(ClUiObje):
 		self.size = self.parent.getSize()
 		return self.size
 
+	def update(self):
+		pass
 	def draw(self, in_ConsSize:Size, in_Point:Point)->int:
 		x = 0
 		return x
@@ -206,7 +218,9 @@ class ConsoleUserInterface_base():
 	
 	def __init__(self) -> None:
 		self.obj:ClUiObje=[]
-		world=World(Size(terminal_size.columns,terminal_size.lines))
+		
+		rect = Rect( 0, 0, terminal_size.columns, terminal_size.lines)
+		world=World(rect)
 		window=Window()
 		world.addChild(window)
 		self.addChild(world)
@@ -219,7 +233,8 @@ class ConsoleUserInterface_base():
 	def draw(self)-> DrawStatus:
 		columns = terminal_size.columns
 		lines = terminal_size.lines
-
+		for o in self.obj:
+			o.update()
 		#if (columns < self.size_w_min) :
 		#	return DrawStatus.UnderConsoleSize
 		#if (lines < self.console_size_h_min) :
