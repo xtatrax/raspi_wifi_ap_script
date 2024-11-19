@@ -173,9 +173,9 @@ class Window(ClUiObje):
 
 	def draw(self, in_ConsSize:Size, in_Point:Point)->int:
 		self.getSize()
-		for o in self.child:
-			x += o.draw(Size( lines , columns ),Point(w,h))
 		x = 0
+		for o in self.child:
+			x += o.draw(in_ConsSize,in_Point)
 		return x
 
 class WindowFrame(ClUiObje):

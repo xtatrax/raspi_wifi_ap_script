@@ -73,7 +73,7 @@ class Rect():
 	def __init__(self,begin,end):
 		self.begin=begin
 		self.size=begin-end
-	    pass
+		pass
 	def __init__(self,point,size):
 		self.point=point
 		self.size=size
