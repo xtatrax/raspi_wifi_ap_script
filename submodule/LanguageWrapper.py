@@ -90,7 +90,7 @@ class LangWap():
 		elif self.sub_lang.get(msg_tag):
 			return self.sub_lang.get(msg_tag)
 
-		return "undefined"
+		return msg_tag
 
 if __name__ == "__main__":
 	debug.set_level(LogLevel.DEBUG)
