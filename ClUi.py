@@ -25,13 +25,13 @@ class World(CuiDsp.ClUiObje):
 		self.bg_color:CuiDsp.Color.BG = CuiDsp.Color.BG.BLUE
 		self.base_text_color:CuiDsp.Color.FG = CuiDsp.Color.FG.BLACK
 		super().__init__()
-		self.rect=rect
+		self.setRect(rect)
 		return
 
 	def getSize(self)->CuiDsp.Size:
 		return self.rect.getSize()
 	def update(self,rect:CuiDsp.Rect):
-		self.rect=rect
+		self.setRect(rect)
 		for o in self.child:
 			o.update()
 	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
@@ -54,7 +54,7 @@ class World(CuiDsp.ClUiObje):
 
 class Window(CuiDsp.ClUiObje):
 
-	margin_par = 3 # %
+	margin_par = 10 # %
 	margin_min = 1 # char
 	padding_par = 0 # %
 	padding_min = 2 # char
@@ -81,7 +81,7 @@ class Window(CuiDsp.ClUiObje):
 		wmw = math.floor( size.w * (self.margin_par / 100) )
 		w_margin_w =  wmw if ( wmw > self.margin_min ) else self.margin_min
 
-		self.rect = CuiDsp.Rect(CuiDsp.Point(w_margin_w,w_margin_h), end=CuiDsp.Point(size.w - w_margin_w, size.h - w_margin_h ))
+		self.setRect( CuiDsp.Rect(CuiDsp.Point(w_margin_w,w_margin_h), end=CuiDsp.Point(size.w - w_margin_w, size.h - w_margin_h )),  )
 		for o in self.child:
 			o.update()
 
@@ -135,7 +135,8 @@ class WindowFrame(CuiDsp.ClUiObje):
 
 		return x
 
-
+class WindowFrame(CuiDsp.ClUiObje):
+	pass
 
 
 class ConsoleUserInterface(CuiDsp.ConsoleUserInterface_base):

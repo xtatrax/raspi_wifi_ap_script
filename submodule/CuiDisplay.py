@@ -94,11 +94,16 @@ class ClUiObje():
 class ClUiObje():
 	bg_color:Color.BG = Color.BG.BLUE
 	base_text_color:Color.FG = Color.FG.BLACK
+	isLocal:bool=False
 	def __init__(self) -> None:
 		self.child:ClUiObje=[]
 		self.parent:ClUiObje
 		self.rect:Rect
 		return
+
+	def setRect(self, rect:Rect, isLocal:bool=False):
+		self.isLocal = isLocal
+		self.rect = rect
 
 	def getSize(self)-> Size:
 		return self.rect.getSize()
@@ -106,6 +111,42 @@ class ClUiObje():
 	def getRect(self)->Rect:
 		return self.rect
 	
+	def getParent(self)->ClUiObje:
+		return self.parent
+	
+	def getParentSize(self)->Size:
+		if self.getParent() :
+			return self.getParent().getSize()
+		return None
+
+	def getParentRect(self)->Rect:
+		if self.getParent() :
+			return self.getParent().getRect()
+		return None
+
+	@overload
+	def convWorld(self,pos:Point)->Point:
+		pass
+	@overload
+	def convWorld(self,rect:Rect)->Rect:
+		pass
+	def convWorld(self,arg1):
+		if type(arg1) is Point:
+			if self.isLocal :
+				p = self.getParentRect()
+				if p :
+					pass
+			pass
+		elif type(arg1) is Rect:
+			pass
+	
+	def getWorldRect(self) -> Rect:
+		pRect = self.getParentRect()
+		rRect = self.getRect()
+		if pRect :
+			rRect.m_point += pRect.getBegin()
+		return rRect
+
 	def __addParent(self,parent:ClUiObje):
 		self.parent = parent
 		return
