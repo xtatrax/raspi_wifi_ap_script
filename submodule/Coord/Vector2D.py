@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 ############################################################
-# file			 : __init__.py
-# 制作			 : tatra 2024年11月23日
+# file			 : Vector2D.py
+# 推奨TABサイズ	 : 4
+# 制作			 : tatra 2024年11月24日
 # 対象バージョン : python 3.10. 以上
 # version 		 : '0.0.1'
-#	座標系の定義
-#
+# 説明			 :
+#	座標系ベクトルの定義
 #
 # メモ :
 #
@@ -14,11 +15,8 @@
 # 外部モジュール : 
 # ---------------------------------------------------------------------------
 ############################################################
-
-
-from .Align import Align
-from .Point import Point
-from .Rect import Rect
-from .Size import Size
-#from Vector2D import Vector2D
-
+class Vector2D():
+	pass
+class Vector2D():
+	l=0
+	r=0

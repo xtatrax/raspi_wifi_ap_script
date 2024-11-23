@@ -17,14 +17,14 @@
 import math
 import shutil
 import os
-#from Coor import Size
+from typing import overload
 
 if __name__ == "__main__":
 	from debug import debug, LogLevel
-	from Coor import *
+	from Coord import *
 else :
 	from .debug import debug, LogLevel
-	from .Coor import *
+	from .Coord import *
 
 
 class Color:
