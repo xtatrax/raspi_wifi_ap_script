@@ -18,8 +18,8 @@
 
 import argparse
 import enum
-from submodule.debug import debug, LogLevel
-from submodule import LanguageWrapper
+from tlib.debug import debug, LogLevel
+from tlib import LanguageWrapper
 """
 def thread_arg_type(string):
     value = int(string)

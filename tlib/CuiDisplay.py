@@ -97,7 +97,7 @@ class ClUiObje():
 	isLocal:bool=False
 	def __init__(self) -> None:
 		self.child:ClUiObje=[]
-		self.parent:ClUiObje
+		self.parent:ClUiObje=None
 		self.rect:Rect
 		return
 
@@ -124,29 +124,31 @@ class ClUiObje():
 			return self.getParent().getRect()
 		return None
 
-	@overload
-	def convWorld(self,pos:Point)->Point:
-		pass
-	@overload
-	def convWorld(self,rect:Rect)->Rect:
-		pass
-	def convWorld(self,arg1):
-		if type(arg1) is Point:
-			if self.isLocal :
-				p = self.getParentRect()
-				if p :
-					pass
-			pass
-		elif type(arg1) is Rect:
-			pass
-	
+	def getParentWorldRect(self)->Rect:
+		if self.getParent() :
+			return self.getParent().getWorldRect()
+		return None
+
 	def getWorldRect(self) -> Rect:
-		pRect = self.getParentRect()
-		rRect = self.getRect()
+		pRect = self.getParentWorldRect()
+		rRect = Rect(rect=self.getRect())
 		if pRect :
-			rRect.m_point += pRect.getBegin()
+			if self.isLocal:
+				rRect.m_point += pRect.getBegin()
+				if not rRect.isAbsolute():
+					if rRect.m_size.w < 0:
+						rRect.m_size.w = pRect.m_size.w + rRect.m_size.w
+					else:
+						rRect.m_size.w -= pRect.m_size.w
+					if rRect.m_size.h < 0:
+						rRect.m_size.h = pRect.m_size.h + rRect.m_size.h
+					else:
+						rRect.m_size.h -= pRect.m_size.h
 		return rRect
 
+	def isInPoint(self,pos:Point):
+		return self.getWorldRect().isInPoint(pos)
+	
 	def __addParent(self,parent:ClUiObje):
 		self.parent = parent
 		return
@@ -155,10 +157,13 @@ class ClUiObje():
 		child.__addParent(self)
 		self.child.append(child)
 		return
+	
 	def update_color(self):
 		print(self.bg_color + self.base_text_color,end="")
+
 	def reset_color(self):
 		print(Color.CT.RESET,end="")
+
 	def draw_print(self,str):
 		print(str,end="")
 
@@ -168,7 +173,7 @@ class ClUiObje():
 	def draw(self, in_CanvasSize:Size, in_Point:Point)->int:
 		x=0
 		for child in self.child:
-			x+=child.draw(in_CanvasSize,in_Point)
+			x += child.draw(in_CanvasSize,in_Point)
 			if x != 0:
 				continue
 		return x
@@ -211,7 +216,7 @@ class ConsoleUserInterface_base():
 		columns = size.columns-1
 		lines = size.lines-1
 		for o in self.obj:
-			o.update(Rect(Point(0,0),Size(columns,lines)))
+			o.update(Rect(point=Point(x=0,y=0),size=Size(columns,lines)))
 		#if (columns < self.size_w_min) :
 		#	return DrawStatus.UnderConsoleSize
 		#if (lines < self.console_size_h_min) :
@@ -222,7 +227,7 @@ class ConsoleUserInterface_base():
 			w = 0
 			while( w <= columns):
 				for o in self.obj:
-					w += o.draw(Size( lines , columns ),Point(w,h))
+					w += o.draw(Size( lines , columns ),Point(x=w,y=h))
 			h+=1
 
 if __name__ == "__main__":

@@ -16,9 +16,15 @@
 # ---------------------------------------------------------------------------
 ############################################################
 import math
-from submodule.debug import debug, LogLevel
-from submodule import LanguageWrapper
-import submodule.CuiDisplay as CuiDsp
+from tlib.debug import debug, LogLevel
+from tlib import LanguageWrapper
+import tlib.CuiDisplay as CuiDsp
+
+hexc="[0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]"
+def debug1cN(num)->str:
+	l = len(hexc)
+	m = num % l
+	return hexc[m]
 
 class World(CuiDsp.ClUiObje):
 	def __init__(self, rect:CuiDsp.Rect) -> None:
@@ -35,7 +41,6 @@ class World(CuiDsp.ClUiObje):
 		for o in self.child:
 			o.update()
 	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
-		num=in_Point.x%10
 
 		x=0
 		for child in self.child:
@@ -45,10 +50,15 @@ class World(CuiDsp.ClUiObje):
 
 		self.update_color()
 		if x == 0:
-			self.draw_print(num)
+			c = " "
+			if (( in_Point.x == in_CanvasSize.h )
+			and ( in_Point.y != in_CanvasSize.w )):
+				self.draw_print("\n")
+			else:
+				self.draw_print(debug1cN(in_Point.x))
+			
 			x+=1
-		#if in_Point.x == in_CanvasSize.h:
-		#	print("\n")
+
 		self.reset_color()
 		return x
 
@@ -81,20 +91,23 @@ class Window(CuiDsp.ClUiObje):
 		wmw = math.floor( size.w * (self.margin_par / 100) )
 		w_margin_w =  wmw if ( wmw > self.margin_min ) else self.margin_min
 
-		self.setRect( CuiDsp.Rect(CuiDsp.Point(w_margin_w,w_margin_h), end=CuiDsp.Point(size.w - w_margin_w, size.h - w_margin_h )),  )
+		self.setRect(
+			CuiDsp.Rect(
+				start=CuiDsp.Point(x=w_margin_w,y=w_margin_h),
+				end=CuiDsp.Point(x=size.w - w_margin_w, y=size.h - w_margin_h )
+			), True )
 		for o in self.child:
 			o.update()
 
-	def draw(self, in_ConsSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
-		if not self.rect.isInPoint(in_Point) :
+	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
+		if not self.isInPoint(in_Point) :
 			return 0
 
 		x = 0
 		self.update_color()
-		for o in self.child:
-			x += o.draw(in_ConsSize,in_Point)
-			if x != 0:
-				continue
+
+		x += super().draw(in_CanvasSize,in_Point)
+
 		if x == 0:
 			self.draw_print(" ")
 			x+=1
@@ -111,41 +124,76 @@ class WindowFrame(CuiDsp.ClUiObje):
 		for o in self.child:
 			o.update()
 
-	def draw(self, in_ConsSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
+	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
 		x = 0
-		endx=self.rect.getEndX()
-		if (self.rect.getBeginX() == in_Point.x) and (self.rect.getBeginY() == in_Point.y):
+		wRect = self.getWorldRect()
+		if (wRect.getBeginX() == in_Point.x) and (wRect.getBeginY() == in_Point.y):
 			self.draw_print("┏")
-			x+=1
-		elif (self.rect.getEndX() == in_Point.x) and (self.rect.getBeginY() == in_Point.y):
+			return 1
+		elif (wRect.getEndX() == in_Point.x) and (wRect.getBeginY() == in_Point.y):
 			self.draw_print("┓")
-			x+=1
-		elif (self.rect.getBeginX() == in_Point.x) and (self.rect.getEndY() == in_Point.y):
+			return 1
+		elif (wRect.getBeginX() == in_Point.x) and (wRect.getEndY() == in_Point.y):
 			self.draw_print("┗")
-			x+=1
-		elif (self.rect.getEndX() == in_Point.x) and (self.rect.getEndY() == in_Point.y):
+			return 1
+		elif (wRect.getEndX() == in_Point.x) and (wRect.getEndY() == in_Point.y):
 			self.draw_print("┛")
-			x+=1
-		elif ((self.rect.getBeginX() == in_Point.x) or (self.rect.getEndX() == in_Point.x)):
+			return 1
+		elif ((wRect.getBeginX() == in_Point.x) or (wRect.getEndX() == in_Point.x)):
 			self.draw_print("┃")
-			x+=1
-		elif ((self.rect.getBeginY() == in_Point.y) or (self.rect.getEndY() == in_Point.y)):
+			return 1
+		elif ((wRect.getBeginY() == in_Point.y) or (wRect.getEndY() == in_Point.y)):
 			self.draw_print("━")
-			x+=1
+			return 1
+
+		x += super().draw(in_CanvasSize,in_Point)
 
 		return x
 
-class WindowFrame(CuiDsp.ClUiObje):
-	pass
+class DrawArea(CuiDsp.ClUiObje):
 
+	m_BaceRect:CuiDsp.Rect
+	isDebug=True
+	def __init__(self, rect:CuiDsp.Rect=CuiDsp.Rect(x=2,y=2,w=-2,h=-2 , abs=False) ) -> None:
+		super().__init__()
+		self.m_BaceRect=rect
+		if self.isDebug:
+			self.bg_color = CuiDsp.Color.BG.GREENr
+
+
+	def update(self):
+		self.setRect(
+			self.m_BaceRect,
+			True
+		)
+		for o in self.child:
+			o.update()
+		pass
+	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
+		if not self.isInPoint(in_Point) :
+			return 0
+
+		x = 0
+		if self.isDebug:
+			self.update_color()
+
+		x += super().draw(in_CanvasSize,in_Point)
+
+		if self.isDebug:
+			if x == 0:
+				self.draw_print(" ")
+				x+=1
+		return x
 
 class ConsoleUserInterface(CuiDsp.ConsoleUserInterface_base):
 	def __init__(self) -> None:
 		super().__init__()
-		rect = CuiDsp.Rect( CuiDsp.Point(0, 0), self.size)
+		rect = CuiDsp.Rect( point=CuiDsp.Point(x=0, y=0), size=self.size)
 		world=World(rect)
 		window=Window()
 		frame=WindowFrame()
+		drawArea=DrawArea()
+		frame.addChild(drawArea)
 		window.addChild(frame)
 		world.addChild(window)
 		self.addChild(world)

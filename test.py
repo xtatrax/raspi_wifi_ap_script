@@ -15,9 +15,9 @@
 # 外部モジュール : chardet
 # ---------------------------------------------------------------------------
 ############################################################
-from submodule.debug import debug, LogLevel
-from submodule import LanguageWrapper
-from submodule.CuiDisplay import ConsoleUserInterface_base
+from tlib.debug import debug, LogLevel
+from tlib import LanguageWrapper
+from tlib.CuiDisplay import ConsoleUserInterface_base
 import ClUi
 
 if __name__ == "__main__":

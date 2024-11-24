@@ -36,7 +36,7 @@ class Size():
 	def __init__(self) -> None:
 		pass
 	@overload
-	def __init__(self,point:Size) -> None:
+	def __init__(self,size:Size) -> None:
 		pass
 	@overload
 	def __init__(self,point:'Point') -> None:
@@ -56,7 +56,7 @@ class Size():
 			debug.iprint(" please if ( (type(arg1) is int) and (type(arg2) is int))")
 			debug.cprint("if arg1 is int case of arg2 is int please")
 
-		elif type(arg1) is 'Point':
+		elif str(type(arg1)) == '<class \''+__package__+'.Point.Point\'>':
 			self.w = arg1.x
 			self.h = arg1.y
 			return
@@ -68,6 +68,7 @@ class Size():
 			self.w = arg1.columns
 			self.h = arg1.lines
 			return
+		debug.cprint("invalid argument")
 
 
 	@overload
@@ -80,7 +81,7 @@ class Size():
 	def __add__(self, other:int)->Size:
 		pass
 	def __add__(self, other)->Size:
-		if type(other) is Point:
+		if str(type(other)) == '<class \''+__package__+'.Point.Point\'>':
 			return Size(self.w + other.x,self.h + other.y)
 		elif type(other) is Size:
 			return Size(self.w + other.w,self.h + other.h)
@@ -98,7 +99,7 @@ class Size():
 	def __iadd__(self, other:int)->Size:
 		pass
 	def __iadd__(self, other)->Size:
-		if type(other) is Point:
+		if str(type(other)) == '<class \''+__package__+'.Point.Point\'>':
 			self.w += other.x
 			self.h += other.y
 			return self
@@ -122,7 +123,7 @@ class Size():
 	def __sub__(self, other:int)->Size:
 		pass
 	def __sub__(self, other)->Size:
-		if type(other) is 'Point':
+		if str(type(other)) == '<class \''+__package__+'.Point.Point\'>':
 			return Size(self.w - other.x, self.h - other.y)
 		elif type(other) is Size:
 			return Size(self.w - other.w, self.h - other.h)
@@ -140,7 +141,7 @@ class Size():
 	def __isub__(self, other:int)->Size:
 		pass
 	def __isub__(self, other)->Size:
-		if type(other) is 'Point':
+		if str(type(other)) == '<class \''+__package__+'.Point.Point\'>':
 			self.w -= other.x
 			self.h -= other.y
 			return self
