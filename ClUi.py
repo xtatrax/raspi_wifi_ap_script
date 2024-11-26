@@ -9,7 +9,9 @@
 #
 #
 # メモ :
-#
+# curses curses.window とか言うそれだ！なモジュールがあるらしい
+# やっと見つけた感 後でそっちでも実装してみる。
+# それはそれとしてこっちも書く
 #""" Details about the module and for what purpose it was built for"""
 # ---------------------------------------------------------------------------
 # 外部モジュール : chardet
