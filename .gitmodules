@@ -1,0 +1,3 @@
+[submodule "tlib"]
+	path = tlib
+	url = git@github.com:xtatrax/tlib.git
