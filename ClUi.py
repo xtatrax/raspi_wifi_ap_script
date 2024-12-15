@@ -38,15 +38,17 @@ class World(CuiDsp.ClUiObje):
 
 	def getSize(self)->CuiDsp.Size:
 		return self.rect.getSize()
+
 	def update(self,rect:CuiDsp.Rect):
 		self.setRect(rect)
-		for o in self.child:
-			o.update()
+		for o in self.childlist:
+			o[1].update()
+
 	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
 
 		x=0
-		for child in self.child:
-			x += child.draw(in_CanvasSize,in_Point)
+		for child in self.childlist:
+			x += child[1].draw(in_CanvasSize,in_Point)
 			if x != 0:
 				continue
 
@@ -98,8 +100,8 @@ class Window(CuiDsp.ClUiObje):
 				start=CuiDsp.Point(x=w_margin_w,y=w_margin_h),
 				end=CuiDsp.Point(x=size.w - w_margin_w, y=size.h - w_margin_h )
 			), True )
-		for o in self.child:
-			o.update()
+		for o in self.childlist:
+			o[1].update()
 
 	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
 		if not self.isInPoint(in_Point) :
@@ -123,8 +125,8 @@ class WindowFrame(CuiDsp.ClUiObje):
 	def update(self):
 		parent_rect = self.parent.getRect()
 		self.rect = parent_rect
-		for o in self.child:
-			o.update()
+		for o in self.childlist:
+			o[1].update()
 
 	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
 		x = 0
@@ -168,8 +170,8 @@ class DrawArea(CuiDsp.ClUiObje):
 			self.m_BaceRect,
 			True
 		)
-		for o in self.child:
-			o.update()
+		for o in self.childlist:
+			o[1].update()
 		pass
 	def draw(self, in_CanvasSize:CuiDsp.Size, in_Point:CuiDsp.Point)->int:
 		if not self.isInPoint(in_Point) :
@@ -190,12 +192,13 @@ class DrawArea(CuiDsp.ClUiObje):
 class ConsoleUserInterface(CuiDsp.ConsoleUserInterface_base):
 	def __init__(self) -> None:
 		super().__init__()
+
 		rect = CuiDsp.Rect( point=CuiDsp.Point(x=0, y=0), size=self.size)
 		world=World(rect)
 		window=Window()
 		frame=WindowFrame()
 		drawArea=DrawArea()
-		frame.addChild(drawArea)
-		window.addChild(frame)
-		world.addChild(window)
-		self.addChild(world)
+		frame.addChild(drawArea,"drawArea")
+		window.addChild(frame,"frame")
+		world.addChild(window,"window")
+		self.addChild(world,"world")

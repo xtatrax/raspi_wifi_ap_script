@@ -24,4 +24,4 @@ if __name__ == "__main__":
 	debug.set_level(LogLevel.ALL)
 	CUI = ClUi.ConsoleUserInterface()
 	CUI.draw()
-	input()
+	#input()
