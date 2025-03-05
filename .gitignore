@@ -2,3 +2,4 @@
 debug.log
 *.pyc
 /char
+config/config.sh
