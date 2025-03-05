@@ -11,15 +11,15 @@ wlan0_macadd=$(cat /sys/class/net/wlan0/address)
 vmacadd=ee:ee:ee:12:34:56
 target_name="Raspberry"
 
-dhcp_root_addr=192.168.200.1
-dhcp_lange_start=192.168.200.2
-dhcp_lange_end=192.168.200.254
+dhcp_root_addr=
+dhcp_lange_start=
+dhcp_lange_end=
 
 
-vnic_name=ap0
-ssid=dev_net_01
-ssid_key=devnet_user1234
-ct_name=dev_net_ap
+vnic_name=
+ssid=
+ssid_key=
+ct_name=
 
 ieee80211_band=bg
 ieee80211_channel=11
