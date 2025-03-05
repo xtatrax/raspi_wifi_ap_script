@@ -36,8 +36,9 @@ fi
 
 ##################
 #
-#   
 #
+#
+get
 apt update
 apt install -y $apt_install_list
 #systemctl disable dnsmasq
@@ -62,3 +63,5 @@ nmcli con up $ct_name
 nmcli con modify preconfigured type wifi ifname wlan0 mode infrastructure
 
 systemctl restart NetworkManager.service
+
+

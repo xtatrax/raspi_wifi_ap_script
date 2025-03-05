@@ -28,3 +28,14 @@ ieee80211_proto=rsn
 ieee80211_group=ccmp
 ieee80211_pairwise=ccmp
 ieee80211_method=shared
+
+function getInstallList(){
+    ins_list=($apt_install_list)
+    for li in ${ins_list[@]} ; do
+        call $li --version
+        ret=$?
+        if [ $ret -ne 0 ] ; then
+            return $ret
+        fi
+    done
+}
